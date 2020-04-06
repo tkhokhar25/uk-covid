@@ -15,9 +15,8 @@ import RegionalMap from "./RegionalMap";
 const width = 20;
 const height = 20;
 
-const UKMap = ({ setTooltipContent }) => {
+const UKMap = ({ setTooltipContent, areaCases }) => {
   const [geographies, setGeographies] = useState([]);
-  const [areaCases, setAreaCases] = useState([]);
   const [Regional, toggleDisplayRegional] = useState({ display: false, fileName: '', regionCases: '' });
 
   useEffect(() => {
@@ -29,17 +28,6 @@ const UKMap = ({ setTooltipContent }) => {
         }
         response.json().then(worlddata => {
           setGeographies(feature(worlddata, worlddata.objects.eer).features)
-        })
-      })
-    
-    fetch("/covid_data/uk_by_region.json")
-      .then(response => {
-        if (response.status !== 200) {
-          console.log(`There was a problem: ${response.status}`)
-          return
-        }
-        response.json().then(cases => {
-          setAreaCases(cases);
         })
       })
   }, []);
