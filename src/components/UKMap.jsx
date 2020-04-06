@@ -15,7 +15,7 @@ import RegionalMap from "./RegionalMap";
 const width = 20;
 const height = 20;
 
-const UKMap = () => {
+const UKMap = ({ setTooltipContent }) => {
   const [geographies, setGeographies] = useState([]);
   const [areaCases, setAreaCases] = useState([]);
   const [location, setLocation] = useState({highlighted: ''})
@@ -43,7 +43,7 @@ const UKMap = () => {
           setAreaCases(cases);
         })
       })
-  }, [])
+  }, []);
 
   const handleCountryClick = countryIndex => {
     const regionName = geographies[countryIndex].properties.EER13NM
@@ -64,35 +64,36 @@ const UKMap = () => {
     .range(schemeReds[7]);
 
 
-    return (
-      <>
-        {/* <ComposableMap width={ width } height={ height } projection={projection}  > */}
-        <ComposableMap width={ width } height={ height } projection={projection}  >
+    const UK = () => {
+      console.log('rendering');
+      return (
+      <div style={{width: "40%"}} >
+        <ComposableMap width={ width } height={ height } projection={projection} >
             <Geographies geography={geographies}>
               {({ geographies }) =>
-                geographies.map(geo => (
+                geographies.map((geo, idx) => (
                   <Geography
                     key={geo.rsmKey}
                     geography={geo}
-                    // onMouseEnter={() => {
-                    //   const { NAME, POP_EST } = geo.properties;
-                    //   setTooltipContent(`${NAME} — ${rounded(POP_EST)}`);
-                    // }}
-                    // onMouseLeave={() => {
-                    //   setTooltipContent("");
-                    // }}
+                    onMouseEnter={() => {
+                      setTooltipContent(geo.properties.EER13NM);
+                    }}
+                    onMouseLeave={() => {
+                      setTooltipContent("");
+                    }}
                     fill={geo.properties.EER13NM in areaCases ? colorScale(areaCases[geo.properties.EER13NM].total) : colorScale(0)}
-                    // stroke="#000000"
-                    // strokeWidth="1"
+                    onClick={() => handleCountryClick(idx)}
                     style={{
                       default: {
                         outline: "none",
-                        border: "1px solid black",
-                        borderWidth: "thick"
+                        stroke: "#000000",
+                        strokeWidth: "0.01"
                       },
                       hover: {
                         fill: "#F53",
-                        outline: "none"
+                        outline: "none",
+                        stroke: "#000000",
+                        strokeWidth: "0.05"
                       },
                       pressed: {
                         outline: "none"
@@ -103,17 +104,17 @@ const UKMap = () => {
               }
             </Geographies>
         </ComposableMap>
-      </>
-    );
+      </div>
+    )};
 
-  // return (
-  //   <div>
-  //     {Regional.display ? <RegionalMap fileName={Regional.fileName} regionCases={Regional.regionCases}/> : <UKsvg />
-  //       // <UKsvg geographies={geographies} projection={projection} areaCases={areaCases} colorScale={colorScale} handleCountryClick={handleCountryClick}/>
-  //       }
-  //   </div>
+  return (
+    <div>
+{Regional.display ? <RegionalMap fileName={Regional.fileName} regionCases={Regional.regionCases} setTooltipContent={setTooltipContent}/> : <UK />
+        // <UKsvg geographies={geographies} projection={projection} areaCases={areaCases} colorScale={colorScale} handleCountryClick={handleCountryClick}/>
+        }
+    </div>
 
-  // )
+  )
 }
 
-export default UKMap;
+export default React.memo(UKMap);

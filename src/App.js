@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
-import UKMap from './components/UKMap';
+import UKMap from './components/UKMap.jsx';
+import ReactTooltip from "react-tooltip";
 
 const App = () => {
     const [cases, setCases] = useState(null)
+    const [content, setContent] = useState('');
 
     useEffect(() => {
         fetch("/covid_data/uk_totals.json")
@@ -66,9 +68,11 @@ const App = () => {
             }}
         />;
 
+    console.log(content);
   return (
-    <div>
-        <UKMap/>
+    <div data-tip=''>
+        <UKMap setTooltipContent={setContent} />
+        <ReactTooltip>{content}</ReactTooltip>
         {cases === null ? null : <div style={{height:200, width:400}}><ConfirmedChart /></div>}
         {cases === null ? null : <div style={{height:200, width:400}}><TestsChart /></div>}
         {cases === null ? null : <div style={{height:200, width:400}}><DeathsChart /></div>}
