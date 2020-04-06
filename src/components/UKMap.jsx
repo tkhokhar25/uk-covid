@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { geoMercator, geoPath, geoProjection } from "d3-geo";
+import { geoMercator } from "d3-geo";
 import { schemeReds } from "d3-scale-chromatic";
 import { scaleThreshold } from "d3-scale";
 import { feature } from "topojson-client";
 import {
-  ZoomableGroup,
   ComposableMap,
   Geographies,
   Geography
 } from "react-simple-maps";
+import { Button } from 'reactstrap';
 
 import RegionalMap from "./RegionalMap";
 
@@ -18,7 +18,6 @@ const height = 20;
 const UKMap = ({ setTooltipContent }) => {
   const [geographies, setGeographies] = useState([]);
   const [areaCases, setAreaCases] = useState([]);
-  const [location, setLocation] = useState({highlighted: ''})
   const [Regional, toggleDisplayRegional] = useState({ display: false, fileName: '', regionCases: '' });
 
   useEffect(() => {
@@ -47,14 +46,9 @@ const UKMap = ({ setTooltipContent }) => {
 
   const handleCountryClick = countryIndex => {
     const regionName = geographies[countryIndex].properties.EER13NM
-    const fileName = regionName.replace(' ', '_')
+    const fileName = regionName.replace(/ /g, '_')
 
     toggleDisplayRegional({ display: true, fileName, regionCases: areaCases[regionName].regional });
-  }
-
-  const handleMouseEnter = countryIndex => {
-    console.log(geographies[countryIndex].properties.EER13NM)
-    setLocation(geographies[countryIndex].properties.EER13NM);
   }
 
   const projection = geoMercator().fitSize([width, height], {type:"FeatureCollection", features: geographies})
@@ -65,9 +59,8 @@ const UKMap = ({ setTooltipContent }) => {
 
 
     const UK = () => {
-      console.log('rendering');
       return (
-      <div style={{width: "40%"}} >
+      <div style={{width: "100%"}} >
         <ComposableMap width={ width } height={ height } projection={projection} >
             <Geographies geography={geographies}>
               {({ geographies }) =>
@@ -76,7 +69,7 @@ const UKMap = ({ setTooltipContent }) => {
                     key={geo.rsmKey}
                     geography={geo}
                     onMouseEnter={() => {
-                      setTooltipContent(geo.properties.EER13NM);
+                      setTooltipContent(`${geo.properties.EER13NM}: ${areaCases[geo.properties.EER13NM].total} Cases`);
                     }}
                     onMouseLeave={() => {
                       setTooltipContent("");
@@ -90,7 +83,7 @@ const UKMap = ({ setTooltipContent }) => {
                         strokeWidth: "0.01"
                       },
                       hover: {
-                        fill: "#F53",
+                        // fill: "#F53",
                         outline: "none",
                         stroke: "#000000",
                         strokeWidth: "0.05"
@@ -107,10 +100,15 @@ const UKMap = ({ setTooltipContent }) => {
       </div>
     )};
 
+    const Region = () => 
+      <div>
+        <Button color='primary' onClick={() => toggleDisplayRegional({display: false})}>BACK</Button>
+        <RegionalMap fileName={Regional.fileName} regionCases={Regional.regionCases} setTooltipContent={setTooltipContent}/>
+      </div>
+
   return (
     <div>
-{Regional.display ? <RegionalMap fileName={Regional.fileName} regionCases={Regional.regionCases} setTooltipContent={setTooltipContent}/> : <UK />
-        // <UKsvg geographies={geographies} projection={projection} areaCases={areaCases} colorScale={colorScale} handleCountryClick={handleCountryClick}/>
+{Regional.display ? <Region /> : <UK />
         }
     </div>
 

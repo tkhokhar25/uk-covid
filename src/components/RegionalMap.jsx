@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { geoMercator, geoPath } from "d3-geo";
+import { geoMercator } from "d3-geo";
 import { schemeReds } from "d3-scale-chromatic";
 import { scaleThreshold } from "d3-scale";
 import { feature } from "topojson-client";
 import {
-  ZoomableGroup,
   ComposableMap,
   Geographies,
   Geography
@@ -15,8 +14,6 @@ const height = 800;
 
 const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
   const [geographies, setGeographies] = useState([])
-  // const [areaCases, setAreaCases] = useState([])
-  // const [location, setLocation] = useState("")
 
   useEffect(() => {
     console.log(fileName)
@@ -30,7 +27,7 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
           setGeographies(feature(worlddata, worlddata.objects.x).features)
         })
       })
-  }, [])
+  }, [fileName])
 
   const handleCountryClick = countryIndex => {
     console.log(geographies[countryIndex].properties.lad19nm);
@@ -44,7 +41,7 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
     .range(schemeReds[7]);
 
   return (
-    <div style={{width: "40%"}} >
+    <div style={{width: "100%"}} >
     <ComposableMap width={ width } height={ height } projection={projection} >
         <Geographies geography={geographies}>
           {({ geographies }) =>
@@ -53,7 +50,8 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
                 key={geo.rsmKey}
                 geography={geo}
                 onMouseEnter={() => {
-                  setTooltipContent(geo.properties.lad19nm);
+                  const numCases = (geo.properties.lad19nm in regionCases ? regionCases[geo.properties.lad19nm] : '0');
+                  setTooltipContent(`${geo.properties.lad19nm}: ${numCases} Cases`);
                 }}
                 onMouseLeave={() => {
                   setTooltipContent("");
@@ -64,13 +62,13 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
                   default: {
                     outline: "none",
                     stroke: "#000000",
-                    strokeWidth: "0.01"
+                    strokeWidth: "0.5"
                   },
                   hover: {
-                    fill: "#F53",
+                    // fill: "#F53",
                     outline: "none",
                     stroke: "#000000",
-                    strokeWidth: "0.05"
+                    strokeWidth: "2"
                   },
                   pressed: {
                     outline: "none"

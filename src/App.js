@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Line } from "react-chartjs-2";
 import UKMap from './components/UKMap.jsx';
 import ReactTooltip from "react-tooltip";
+import { Container, Row, Col } from 'reactstrap';
 
 const App = () => {
     const [cases, setCases] = useState(null)
@@ -68,15 +69,28 @@ const App = () => {
             }}
         />;
 
-    console.log(content);
   return (
-    <div data-tip=''>
-        <UKMap setTooltipContent={setContent} />
-        <ReactTooltip>{content}</ReactTooltip>
-        {cases === null ? null : <div style={{height:200, width:400}}><ConfirmedChart /></div>}
-        {cases === null ? null : <div style={{height:200, width:400}}><TestsChart /></div>}
-        {cases === null ? null : <div style={{height:200, width:400}}><DeathsChart /></div>}
-    </div>
+    <Container data-tip=''>
+        <Row>
+            <Col>
+                <h1>{'UK Covid-19'}</h1>
+            </Col>
+        </Row>
+        <Row>
+            <Col>
+                <UKMap setTooltipContent={setContent} />
+                <ReactTooltip>{content}</ReactTooltip>
+            </Col>
+            <Col>
+                <Row>{cases === null ? null : <div style={{height:200, width:400}}><ConfirmedChart /></div>}</Row>
+                <Row>{cases === null ? null : <div style={{height:200, width:400}}><TestsChart /></div>}</Row>
+                <Row>{cases === null ? null : <div style={{height:200, width:400}}><DeathsChart /></div>}</Row>
+            </Col>
+        </Row>
+        <Row>
+            
+        </Row>
+    </Container>
   )
 }
 
