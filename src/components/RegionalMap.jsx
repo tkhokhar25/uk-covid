@@ -16,7 +16,6 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
   const [geographies, setGeographies] = useState([])
 
   useEffect(() => {
-    console.log(fileName)
     fetch("/maps/" + fileName + ".json")
       .then(response => {
         if (response.status !== 200) {

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Line } from "react-chartjs-2";
 import UKMap from './components/UKMap.jsx';
 import ReactTooltip from "react-tooltip";
 import { Container, Row, Col } from 'reactstrap';
 import CovidTable from "./components/CovidTable.jsx";
-import { Fade } from 'reactstrap';
+import { Button } from 'reactstrap';
+import Chart from './components/Chart.jsx';
 
 const App = () => {
     const [cases, setCases] = useState(null)
     const [content, setContent] = useState('');
     const [areaCases, setAreaCases] = useState([]);
+    const [Regional, toggleDisplayRegional] = useState({ display: false, fileName: '', regionCases: '' });
+    const [secondaryTable, setSecondaryTable] = useState({ display: false, areaName: '' });
 
     useEffect(() => {
         fetch("/covid_data/uk_totals.json")
@@ -34,146 +36,32 @@ const App = () => {
               })
             })
     }, [])
-      
-    const ConfirmedChart = () =>
-            <div style={{backgroundColor:'rgba(255,7,58,0.12549)'}} >
-                <Line
-                    data={{
-                        labels: cases.Date,
-                        datasets: [{
-                            label: 'Confirmed Cases',
-                            fill: false,
-                            borderColor: '#ff073a',
-                            data: cases.ConfirmedCases,
-                        }]
-                    }}
-                    options={{
-                        maintainAspectRatio: false,
-                        scales: {
-                            xAxes: [{
-                                gridLines: {
-                                    display:false
-                                },
-                                ticks: {
-                                    autoSkip: true,
-                                    maxTicksLimit: 7
-                                }
-                            }],
-                            yAxes: [{
-                                gridLines: {
-                                    display:false
-                                },
-                                ticks: {
-                                    autoSkip: true,
-                                    maxTicksLimit: 7,
-                                    callback: value => `${value / 1000}k`
-                                }
-                            }]
-                        }
-                    }}
-                />
-            </div>;
-
-    const TestsChart = () =>
-        <div style={{backgroundColor: 'rgba(58,7,255,0.12549)'}}>
-            <Line
-                data={{
-                    labels: cases.Date,
-                    datasets: [{
-                        label: 'Tests',
-                        fill: false,
-                        borderColor: '#3a07ff',
-                        data: cases.Tests
-                    }]
-                }}
-                options={{
-                    maintainAspectRatio: false,
-                    scales: {
-                        xAxes: [{
-                            gridLines: {
-                                display:false
-                            },
-                            ticks: {
-                                autoSkip: true,
-                                maxTicksLimit: 7,
-                            }
-                        }],
-                        yAxes: [{
-                            gridLines: {
-                                display:false
-                            },
-                            ticks: {
-                                autoSkip: true,
-                                maxTicksLimit: 7,
-                                callback: value => `${value / 1000}k`
-                            }
-                        }]
-                    }
-                }}
-            />
-            </div>;
-
-    const DeathsChart = () =>
-    <div style={{backgroundColor: '#DCDCDC'}}>
-        <Line
-            data={{
-                labels: cases.Date,
-                datasets: [{
-                    label: 'Deaths',
-                    fill: false,
-                    borderColor: 'grey',
-                    data: cases.Deaths,
-                }]
-            }}
-            options={{
-                maintainAspectRatio: false,
-                scales: {
-                    xAxes: [{
-                        gridLines: {
-                            display:false
-                        },
-                        ticks: {
-                            autoSkip: true,
-                            maxTicksLimit: 7
-                        }
-                    }],
-                    yAxes: [{
-                        gridLines: {
-                            display:false
-                        },
-                        ticks: {
-                            autoSkip: true,
-                            maxTicksLimit: 7,
-                            callback: value => `${value / 1000}k`
-                        }
-                    }]
-                }
-            }}
-        /></div>;
 
   return (
     <Container data-tip=''>
-        <Fade>
-            <Row>
-                <Col>
-                    <h1>{'England Covid-19 Tracker'}</h1>
-                </Col>
-            </Row>
-            <Row>
-                <Col>
-                    <UKMap setTooltipContent={setContent} areaCases={areaCases} />
-                    <ReactTooltip>{content}</ReactTooltip>
-                </Col>
-                <Col>
-                    <Row>{cases === null ? null : <div style={{height:200, width:700}}><ConfirmedChart /></div>}</Row>
-                    <Row>{cases === null ? null : <div style={{height:200, width:700}}><TestsChart /></div>}</Row>
-                    <Row>{cases === null ? null : <div style={{height:200, width:700}}><DeathsChart /></div>}</Row>
-                </Col>
-            </Row>
-            <Row>
-                <CovidTable areaCases={areaCases} />
-            </Row>
-        </Fade>
+        <Row>
+            <Col>
+                <h1>{'England Covid-19 Tracker'}</h1>
+            </Col>
+        </Row>
+        <Row>
+            <Col>
+                <UKMap setTooltipContent={setContent} areaCases={areaCases} Regional={Regional} toggleDisplayRegional={toggleDisplayRegional} secondaryTable={secondaryTable} setSecondaryTable={setSecondaryTable} />
+                <ReactTooltip>{content}</ReactTooltip>
+            </Col>
+            <Col>
+                <CovidTable areaCases={areaCases} toggleDisplayRegional={toggleDisplayRegional} secondaryTable={secondaryTable} setSecondaryTable={setSecondaryTable} />
+                
+            </Col>
+        </Row>
+        <Row>{cases === null ? null : <Chart borderColor={'#ff073a'} backgroundColor={'rgba(255,7,58,0.12549)'} date={cases.Date} data={cases.ConfirmedCases} label={'Confirmed Cases'} />} </Row>
+        <Row>{cases === null ? null : <Chart borderColor={'#3a07ff'} backgroundColor={'rgba(58,7,255,0.12549)'} date={cases.Date} data={cases.Tests} label={'Tests'} />} </Row>
+        <Row>{cases === null ? null : <Chart borderColor={'grey'} backgroundColor={'#DCDCDC'} date={cases.Date} data={cases.Deaths} label={'Deaths'} />} </Row>
+        <Row>
+            <Button style={{backgroundColor: 'White', color: 'black'}} onClick={() => window.open('https://www.github.com/tkhokhar25/uk-covid')}>
+                <img src='/logo32.png' alt='yolo'></img>Check out on Github
+            </Button>
+        </Row>
     </Container>
   )
 }

@@ -15,9 +15,8 @@ import RegionalMap from "./RegionalMap";
 const width = 20;
 const height = 20;
 
-const UKMap = ({ setTooltipContent, areaCases }) => {
+const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, secondaryTable, setSecondaryTable }) => {
   const [geographies, setGeographies] = useState([]);
-  const [Regional, toggleDisplayRegional] = useState({ display: false, fileName: '', regionCases: '' });
 
   useEffect(() => {
     fetch("/maps/phe_regions.json")
@@ -37,6 +36,7 @@ const UKMap = ({ setTooltipContent, areaCases }) => {
     const fileName = regionName.replace(/ /g, '_')
 
     toggleDisplayRegional({ display: true, fileName, regionCases: areaCases[regionName].regional });
+    setSecondaryTable({ display: true, areaName: regionName })
   }
 
   const projection = geoMercator().fitSize([width, height], {type:"FeatureCollection", features: geographies})
@@ -90,7 +90,7 @@ const UKMap = ({ setTooltipContent, areaCases }) => {
 
     const Region = () => 
       <div>
-        <Button color='primary' onClick={() => toggleDisplayRegional({display: false})}>BACK</Button>
+        <Button color='primary' onClick={() => { toggleDisplayRegional({display: false}); setSecondaryTable({ ...secondaryTable, display: false }); }}>BACK</Button>
         <RegionalMap fileName={Regional.fileName} regionCases={Regional.regionCases} setTooltipContent={setTooltipContent}/>
       </div>
 
