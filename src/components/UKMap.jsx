@@ -6,7 +6,7 @@ import { feature } from "topojson-client";
 import {
   ComposableMap,
   Geographies,
-  Geography
+  Geography,
 } from "react-simple-maps";
 import { Button } from 'reactstrap';
 
@@ -19,7 +19,7 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
   const [geographies, setGeographies] = useState([]);
 
   useEffect(() => {
-    fetch("/maps/phe_regions.json")
+    fetch(process.env.PUBLIC_URL + "/maps/phe_regions.json")
       .then(response => {
         if (response.status !== 200) {
           console.log(`There was a problem: ${response.status}`)
@@ -48,7 +48,7 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
 
     const UK = () => {
       return (
-      <div style={{width: "100%"}} >
+      <div style={{width: "700px", height: "700px"}} >
         <ComposableMap width={ width } height={ height } projection={projection} >
             <Geographies geography={geographies}>
               {({ geographies }) =>
@@ -84,6 +84,20 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
                 ))
               }
             </Geographies>
+            {/* <Annotation
+              subject={[ 1.4360, 52.3781]}
+              dx={-90}
+              dy={-30}
+              // connectorProps={{
+              //   stroke: "#FF5533",
+              //   strokeWidth: 3,
+              //   strokeLinecap: "round"
+              // }}
+            >
+              <text>
+                {"Paris"}
+              </text>
+            </Annotation> */}
         </ComposableMap>
       </div>
     )};

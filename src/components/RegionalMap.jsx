@@ -16,7 +16,7 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
   const [geographies, setGeographies] = useState([])
 
   useEffect(() => {
-    fetch("/maps/" + fileName + ".json")
+    fetch(process.env.PUBLIC_URL + "/maps/" + fileName + ".json")
       .then(response => {
         if (response.status !== 200) {
           console.log(`There was a problem: ${response.status}`)
@@ -40,7 +40,7 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
     .range(schemeReds[7]);
 
   return (
-    <div style={{width: "100%"}} >
+    <div style={{width: "500px", height: "500px"}} >
     <ComposableMap width={ width } height={ height } projection={projection} >
         <Geographies geography={geographies}>
           {({ geographies }) =>
@@ -79,26 +79,6 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
         </Geographies>
     </ComposableMap>
   </div>
-
-    // <svg width={ width } height={ height }>
-    //   <g className="countries">
-    //     {
-    //       geographies.map((d,i) => {
-    //         geoPath().projection(projection)(d)
-    //         return(
-            
-    //         <path
-    //           key={ `path-${ i }` }
-    //           d={ geoPath().projection(projection)(d) }
-    //           className="country"
-    //           fill={d.properties.lad19nm in regionCases ? colorScale(regionCases[d.properties.lad19nm]) : colorScale(0)}
-    //           stroke="#000000"
-    //           onClick={ () => handleCountryClick(i) }
-    //         />
-    //       )})
-    //     }
-    //   </g>
-    // </svg>
   )
 }
 

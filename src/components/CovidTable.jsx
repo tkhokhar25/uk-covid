@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Table, Container, Row, Col, Alert, Button } from 'reactstrap';
+import React, { useEffect } from "react";
+import { Table, Container, Row, Col, Alert } from 'reactstrap';
 
 const CovidTable = ({ areaCases, toggleDisplayRegional, secondaryTable, setSecondaryTable }) => {
   useEffect(() => {
