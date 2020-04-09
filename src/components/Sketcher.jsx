@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import Sketch from "react-p5";
 
-const width = 500;
-const height = 500;
+const height = 700;
+const width = 700;
 
  
 const { hypot } = Math
@@ -23,13 +23,14 @@ const checkCollision = ({ dx, dy, diameter }) => {
 var balls = [];
 
 function Ball(p5) {
-	this.x = Math.floor((Math.random() * 400) + 1);
-  this.y = Math.floor((Math.random() * 400) + 1);
+	this.x = Math.floor((Math.random() * width) + 1);
+  this.y = Math.floor((Math.random() * height) + 1);
   this.color = 'blue';
 	this.sz = 15;
 	this.xspeed = Math.random()
   this.yspeed = Math.random();
   this.p5 = p5;
+  this.infectedTime = 0;
 	
 	this.update = () => {
 		this.x += this.xspeed;
@@ -37,6 +38,18 @@ function Ball(p5) {
 	};
 	
 	this.display = () => {
+    if (this.color === 'green') {
+      this.infectedTime += 1;
+      if (this.infectedTime >= 200) {
+        const fate = Math.floor((Math.random() * 5) + 1);
+        if (fate < 2) {
+          this.color = 'grey';
+        } else {
+          this.color = ' pink';
+        }
+      }
+    }
+    
 		p5.fill(this.color);
 		p5.noStroke();
 		p5.ellipse(this.x, this.y, this.sz, this.sz);
@@ -66,7 +79,7 @@ function Ball(p5) {
         otherBall.xspeed = ax
         otherBall.yspeed = ay
 
-        if (this.color === 'green' || otherBall.color === 'green') {
+        if ((this.color === 'green' && (otherBall.color === 'blue' || otherBall.color === 'green')) || (otherBall.color === 'green' && (this.color === 'blue' || this.color === 'green'))) {
           this.color = 'green';
           otherBall.color = 'green';
         }
@@ -81,8 +94,8 @@ export default class Sketcher extends Component {
   y = 50;
  
   setup = (p5, canvasParentRef) => {
-    p5.createCanvas(500, 500).parent(canvasParentRef);
-    for (var i = 0; i < 100; i++) {
+    p5.createCanvas(width, height).parent(canvasParentRef);
+    for (var i = 0; i < 200; i++) {
       balls[i] = new Ball(p5);
     }
     balls[99].color = 'green';
