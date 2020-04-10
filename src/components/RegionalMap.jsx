@@ -28,10 +28,6 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
       })
   }, [fileName])
 
-  const handleCountryClick = countryIndex => {
-    console.log(geographies[countryIndex].properties.lad19nm);
-  }
-
   const projection = geoMercator()
                 .fitSize([width, height], {type:"FeatureCollection", features: geographies})
     
@@ -56,7 +52,6 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
                   setTooltipContent("");
                 }}
                 fill={geo.properties.lad19nm in regionCases ? colorScale(regionCases[geo.properties.lad19nm]) : colorScale(0)}
-                onClick={() => handleCountryClick(idx)}
                 style={{
                   default: {
                     outline: "none",

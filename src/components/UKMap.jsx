@@ -31,8 +31,8 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
       })
   }, []);
 
-  const handleCountryClick = countryIndex => {
-    const regionName = geographies[countryIndex].properties.EER13NM
+  const handleRegionClick = regionIndex => {
+    const regionName = geographies[regionIndex].properties.EER13NM
     const fileName = regionName.replace(/ /g, '_')
 
     toggleDisplayRegional({ display: true, fileName, regionCases: areaCases[regionName].regional });
@@ -63,7 +63,7 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
                       setTooltipContent("");
                     }}
                     fill={geo.properties.EER13NM in areaCases ? colorScale(areaCases[geo.properties.EER13NM].total) : colorScale(0)}
-                    onClick={() => handleCountryClick(idx)}
+                    onClick={() => handleRegionClick(idx)}
                     style={{
                       default: {
                         outline: "none",
@@ -84,20 +84,6 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
                 ))
               }
             </Geographies>
-            {/* <Annotation
-              subject={[ 1.4360, 52.3781]}
-              dx={-90}
-              dy={-30}
-              // connectorProps={{
-              //   stroke: "#FF5533",
-              //   strokeWidth: 3,
-              //   strokeLinecap: "round"
-              // }}
-            >
-              <text>
-                {"Paris"}
-              </text>
-            </Annotation> */}
         </ComposableMap>
       </div>
     )};

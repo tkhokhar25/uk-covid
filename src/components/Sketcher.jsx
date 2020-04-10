@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import Sketch from "react-p5";
+import React from "react";
+import P5Wrapper from 'react-p5-wrapper';
 
-const height = 700;
-const width = 700;
+var height = 0;
+var width = 0;
 
  
 const { hypot } = Math
@@ -22,17 +22,22 @@ const checkCollision = ({ dx, dy, diameter }) => {
 
 var balls = [];
 
-function Ball(p5) {
+function Ball(p) {
 	this.x = Math.floor((Math.random() * width) + 1);
   this.y = Math.floor((Math.random() * height) + 1);
   this.color = 'blue';
 	this.sz = 15;
 	this.xspeed = Math.random()
   this.yspeed = Math.random();
-  this.p5 = p5;
+  this.p = p;
   this.infectedTime = 0;
 	
 	this.update = () => {
+    if (this.color === 'grey') {
+      this.xspeed = 0;
+      this.yspeed = 0;
+    }
+
 		this.x += this.xspeed;
 		this.y += this.yspeed;
 	};
@@ -45,14 +50,14 @@ function Ball(p5) {
         if (fate < 2) {
           this.color = 'grey';
         } else {
-          this.color = ' pink';
+          this.color = 'pink';
         }
       }
     }
     
-		p5.fill(this.color);
-		p5.noStroke();
-		p5.ellipse(this.x, this.y, this.sz, this.sz);
+		p.fill(this.color);
+		p.noStroke();
+		p.ellipse(this.x, this.y, this.sz, this.sz);
 	};
 	
 	this.bounce = () => {
@@ -89,19 +94,31 @@ function Ball(p5) {
   
 }
 
-export default class Sketcher extends Component {
-  x = 50;
-  y = 50;
+function sketch (p) {
+  // var x = 50;
+  // const y = 50;
+  var mySvg = {width: 800, height: 582};
+
+  p.preload = () => {
+    // mySvg = p.loadImage(process.env.PUBLIC_URL + '/phe_regions.svg')
+  };
  
-  setup = (p5, canvasParentRef) => {
-    p5.createCanvas(width, height).parent(canvasParentRef);
+  p.setup = () => {
+    p.createCanvas(mySvg.width, mySvg.height);
+    
+    width = mySvg.width;
+    height = mySvg.height;
     for (var i = 0; i < 200; i++) {
-      balls[i] = new Ball(p5);
+      balls[i] = new Ball(p);
     }
     balls[99].color = 'green';
   };
-  draw = p5 => {
-    p5.background('#FFFFFF');
+  p.draw = () => {
+    // p.imageMode(p.TOP_LEFT);
+    p.background('#FFFFFF');
+    // var ctx = p.drawingContext.canvas.getContext('2d');
+    // ctx.clip();
+    // p.image(mySvg, 0, 0);
     for (var i = 0; i < balls.length; i++) {
       balls[i].update();
       balls[i].display();
@@ -109,10 +126,15 @@ export default class Sketcher extends Component {
       balls[i].checkCollisions(balls, i);
     }
 
-    this.x++;
+    // x++;
   };
 
-  render() {
-    return <div><Sketch setup={this.setup} draw={this.draw} />Blue=Healthy Green=Infected Pink=Recovered Grey=Deceased (Put this inside UK's map and implement recovered and deceased)</div>;
-  }
 }
+// clipPath: `${process.env.PUBLIC_URL}/phe_regions.svg`
+const Sketcher = () =>  
+  // <div style={{clipPath: `url(${process.env.PUBLIC_URL}/phe_regions.svg#Layer_1)`}}>
+    // zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
+    <P5Wrapper sketch={sketch} />
+  // </div>;
+
+export default React.memo(Sketcher);
