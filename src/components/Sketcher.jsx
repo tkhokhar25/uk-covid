@@ -1,140 +1,135 @@
-import React from "react";
+import React, { useState } from "react";
 import P5Wrapper from 'react-p5-wrapper';
+import { Container, Row, Col, Button } from 'reactstrap';
+import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
+import RangeSlider from 'react-bootstrap-range-slider';
 
-var height = 0;
-var width = 0;
+import Ball from './Ball';
 
- 
-const { hypot } = Math
-// Collision and Ball code referenced from stackoverflow.com
-
-const calculateChangeDirection = ({ dx, dy }) => {
-  const hyp = hypot(dx, dy);
-  const ax = dx / hyp;
-  const ay = dy / hyp
-  return { ax, ay }
-}
-
-const checkCollision = ({ dx, dy, diameter }) => {
-  const distance2 = dx * dx + dy * dy
-  return distance2 < diameter * diameter
-}
+const width = 800;
+const height = 600;
 
 var balls = [];
 
-function Ball(p) {
-	this.x = Math.floor((Math.random() * width) + 1);
-  this.y = Math.floor((Math.random() * height) + 1);
-  this.color = 'blue';
-	this.sz = 15;
-	this.xspeed = Math.random()
-  this.yspeed = Math.random();
-  this.p = p;
-  this.infectedTime = 0;
-	
-	this.update = () => {
-    if (this.color === 'grey') {
-      this.xspeed = 0;
-      this.yspeed = 0;
-    }
-
-		this.x += this.xspeed;
-		this.y += this.yspeed;
-	};
-	
-	this.display = () => {
-    if (this.color === 'green') {
-      this.infectedTime += 1;
-      if (this.infectedTime >= 200) {
-        const fate = Math.floor((Math.random() * 5) + 1);
-        if (fate < 2) {
-          this.color = 'grey';
-        } else {
-          this.color = 'pink';
-        }
-      }
-    }
-    
-		p.fill(this.color);
-		p.noStroke();
-		p.ellipse(this.x, this.y, this.sz, this.sz);
-	};
-	
-	this.bounce = () => {
-		if (this.x > width || this.x < 0) {
-			this.xspeed *= -1;
-		}
-		if (this.y > height || this.y < 0) {
-			this.yspeed *= -1;
-		}
-  }
-
-  this.checkCollisions = (others, idx) => {
-    for (let i = idx + 1; i < others.length; i++) {
-      const otherBall = others[i]
-
-      const dx = otherBall.x - this.x
-      const dy = otherBall.y - this.y
-
-      if (checkCollision({ dx, dy, diameter: 15 })) {
-        const { ax, ay } = calculateChangeDirection({ dx, dy })
-
-        this.xspeed -= ax
-        this.yspeed -= ay
-        otherBall.xspeed = ax
-        otherBall.yspeed = ay
-
-        if ((this.color === 'green' && (otherBall.color === 'blue' || otherBall.color === 'green')) || (otherBall.color === 'green' && (this.color === 'blue' || this.color === 'green'))) {
-          this.color = 'green';
-          otherBall.color = 'green';
-        }
-      }
-    }
-  }
-  
-}
-
-function sketch (p) {
-  // var x = 50;
-  // const y = 50;
-  var mySvg = {width: 800, height: 582};
-
-  p.preload = () => {
-    // mySvg = p.loadImage(process.env.PUBLIC_URL + '/phe_regions.svg')
-  };
+function sketch (p, simulationState) {
  
   p.setup = () => {
-    p.createCanvas(mySvg.width, mySvg.height);
+    p.createCanvas(width, height);
     
-    width = mySvg.width;
-    height = mySvg.height;
     for (var i = 0; i < 200; i++) {
-      balls[i] = new Ball(p);
+      balls[i] = new Ball(p, simulationState);
     }
-    balls[99].color = 'green';
+
+    for (i = 0; i < simulationState.initiallyExposed; i++) {
+      balls[i].color = 'orange';
+    }
   };
   p.draw = () => {
-    // p.imageMode(p.TOP_LEFT);
     p.background('#FFFFFF');
-    // var ctx = p.drawingContext.canvas.getContext('2d');
-    // ctx.clip();
-    // p.image(mySvg, 0, 0);
+
     for (var i = 0; i < balls.length; i++) {
       balls[i].update();
       balls[i].display();
       balls[i].bounce();
       balls[i].checkCollisions(balls, i);
     }
+  };
+}
 
-    // x++;
+function sketchLegend(p) {
+  p.setup = () => {
+    p.createCanvas(650, 20);
   };
 
+  p.draw = () => {
+    p.background('#FFFFFF');
+    p.textSize(20)
+
+    p.fill('blue');
+		p.noStroke();
+    p.ellipse(15, 10, 15, 15);
+    
+    p.text('Healthy', 30, 17)
+
+    p.fill('orange');
+		p.noStroke();
+    p.ellipse(130, 10, 15, 15);
+
+    p.text('Exposed', 145, 17);
+
+    p.fill('green');
+		p.noStroke();
+    p.ellipse(245, 10, 15, 15);
+
+    p.text('Infected', 260, 17);
+
+    p.fill('pink');
+		p.noStroke();
+    p.ellipse(360, 10, 15, 15);
+    
+    p.text('Recovered', 375, 17);
+
+    p.fill('grey');
+		p.noStroke();
+    p.ellipse(490, 10, 15, 15);
+    
+    p.text('Deceased', 505, 17);
+
+    p.noLoop()
+  };
 }
-// clipPath: `${process.env.PUBLIC_URL}/phe_regions.svg`
-const Sketcher = () =>  
-  // <div style={{clipPath: `url(${process.env.PUBLIC_URL}/phe_regions.svg#Layer_1)`}}>
-    // zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-    <P5Wrapper sketch={sketch} />
-  // </div>;
+
+const Sketcher = ({ setDisplaySimulator }) =>  {
+  const [simulationState, setSimulationState] = useState({ initiallyExposed: 1, exposedToInfected: 80, infectedToRecovers: 80 });
+
+  return (
+    <Container>
+      <Row>
+        <p>
+          <h1>{'SEIR DISEASE SPREAD MODEL USING BALLS'}</h1>
+          <h6>{'A healthy person can get exposed to the virus.'}</h6>
+          <h6>{'An exposed person recovers or gets infected and can expose other people to the virus.'}</h6>
+          <h6>{'An infected person recovers or dies and can expose other people to the virus.'}</h6>
+        </p>
+      </Row>
+      <Row>
+        <Button color='primary' onClick={() => setDisplaySimulator(false)}><h4>View Map</h4></Button>
+      </Row>
+      <Row>
+          <Col>
+            <P5Wrapper sketch={p => sketch(p, simulationState)} />
+            <P5Wrapper sketch={sketchLegend} />
+          </Col>
+          <Col>
+            <div>
+              <p>Number of initially exposed balls (out of 200)</p>
+              <RangeSlider
+                max={200}
+                value={simulationState.initiallyExposed}
+                onChange={changeEvent => setSimulationState({...simulationState, initiallyExposed: changeEvent.target.value})}
+              />
+            </div>
+            <div>
+              <p>Percent of exposed population that gets infected</p>
+              <RangeSlider
+                value={simulationState.exposedToInfected}
+                onChange={changeEvent => setSimulationState({...simulationState, exposedToInfected: changeEvent.target.value})}
+              />
+            </div>
+            <div>
+              <p>Percent of infected population that recovers</p>
+              <RangeSlider
+                value={simulationState.infectedToRecovers}
+                onChange={changeEvent => setSimulationState({...simulationState, infectedToRecovers: changeEvent.target.value})}
+              />
+            </div>
+            <div>
+              <Button color='primary' onClick={() => setSimulationState({ initiallyExposed: 1, exposedToInfected: 80, infectedToRecovers: 80 })}>RESET AND RUN</Button>
+            </div>
+          </Col>
+      </Row>
+    </Container>
+  )
+};
 
 export default React.memo(Sketcher);

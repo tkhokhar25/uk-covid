@@ -47,7 +47,7 @@ const App = () => {
 
   return (
       <div>
-          {displaySimulator ? <div><Button color='primary' onClick={() => setDisplaySimulator(false)}><h4>View Map</h4></Button><Sketcher /></div> :
+          {displaySimulator ? <Sketcher setDisplaySimulator={setDisplaySimulator}/> :
         <Container data-tip=''>
             <Row>
                 <h1>{'England Covid-19 Tracker'}</h1>
