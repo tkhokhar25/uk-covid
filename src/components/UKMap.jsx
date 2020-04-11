@@ -9,6 +9,7 @@ import {
   Geography,
 } from "react-simple-maps";
 import { Button } from 'reactstrap';
+// import {isMobile} from 'react-device-detect';
 
 import RegionalMap from "./RegionalMap";
 
@@ -19,6 +20,7 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
   const [geographies, setGeographies] = useState([]);
 
   useEffect(() => {
+    // setWidth(window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight)
     fetch(process.env.PUBLIC_URL + "/maps/phe_regions.json")
       .then(response => {
         if (response.status !== 200) {
@@ -48,7 +50,8 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
 
     const UK = () => {
       return (
-      <div style={{width: "700px", height: "700px"}} >
+      <div style={{width: '600px'}} >
+      {/* <div> */}
         <ComposableMap width={ width } height={ height } projection={projection} >
             <Geographies geography={geographies}>
               {({ geographies }) =>

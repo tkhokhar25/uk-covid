@@ -55,7 +55,7 @@ export default function Ball(p, simulationState) {
         if (fate < simulationState.infectedToRecovers) {
           this.color = 'pink';
         } else {
-          this.color = 'green';
+          this.color = 'grey';
         }
       }
     }

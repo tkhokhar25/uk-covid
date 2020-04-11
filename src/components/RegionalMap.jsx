@@ -36,7 +36,8 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
     .range(schemeReds[7]);
 
   return (
-    <div style={{width: "500px", height: "500px"}} >
+    <div style={{width: "500px"}} >
+    {/* <div> */}
     <ComposableMap width={ width } height={ height } projection={projection} >
         <Geographies geography={geographies}>
           {({ geographies }) =>
