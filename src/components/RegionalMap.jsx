@@ -36,7 +36,7 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
     .range(schemeReds[7]);
 
   return (
-    <div style={{width: "500px"}} >
+    <div>
     {/* <div> */}
     <ComposableMap width={ width } height={ height } projection={projection} >
         <Geographies geography={geographies}>
@@ -53,6 +53,10 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
                   setTooltipContent("");
                 }}
                 fill={geo.properties.lad19nm in regionCases ? colorScale(regionCases[geo.properties.lad19nm]) : colorScale(0)}
+                onClick={() => {
+                  const numCases = (geo.properties.lad19nm in regionCases ? regionCases[geo.properties.lad19nm] : '0');
+                  setTooltipContent(`${geo.properties.lad19nm}: ${numCases} Cases`);
+                }}
                 style={{
                   default: {
                     outline: "none",
@@ -78,4 +82,4 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
   )
 }
 
-export default RegionalMap;
+export default React.memo(RegionalMap);

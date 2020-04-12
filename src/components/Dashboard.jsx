@@ -7,7 +7,7 @@ const Dashboard = ({ borderColors, backgroundColors, labels, cases }) => {
 
   return (
     <Row>
-        {backgroundColors.map((color, i) => <Col style={{color: borderColors[i]}}>
+        {backgroundColors.map((color, i) => <Col xs='4' md ='2' style={{color: borderColors[i]}}>
                                                 <Card style={{backgroundColor: color}}>
                                                     <CardBody>
                                                         <CardTitle>{labels[i]}</CardTitle>

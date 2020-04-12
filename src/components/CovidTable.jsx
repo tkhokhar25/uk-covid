@@ -31,7 +31,7 @@ const CovidTable = ({ areaCases, toggleDisplayRegional, secondaryTable, setSecon
                 </Alert>
             </Row>
             <Row>
-                <Col>
+                <Col xs='12'>
                     <Table striped bordered hover>
                         <thead>
                             <tr>

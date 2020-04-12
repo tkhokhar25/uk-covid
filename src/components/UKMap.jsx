@@ -13,14 +13,13 @@ import { Button } from 'reactstrap';
 
 import RegionalMap from "./RegionalMap";
 
-const width = 20;
-const height = 20;
+const width = 800;
+const height = 800;
 
 const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, secondaryTable, setSecondaryTable }) => {
   const [geographies, setGeographies] = useState([]);
 
   useEffect(() => {
-    // setWidth(window.innerHeight > window.innerWidth ? window.innerWidth : window.innerHeight)
     fetch(process.env.PUBLIC_URL + "/maps/phe_regions.json")
       .then(response => {
         if (response.status !== 200) {
@@ -37,6 +36,7 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
     const regionName = geographies[regionIndex].properties.EER13NM
     const fileName = regionName.replace(/ /g, '_')
 
+    setTooltipContent("");
     toggleDisplayRegional({ display: true, fileName, regionCases: areaCases[regionName].regional });
     setSecondaryTable({ display: true, areaName: regionName })
   }
@@ -50,7 +50,7 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
 
     const UK = () => {
       return (
-      <div style={{width: '600px'}} >
+      <div>
       {/* <div> */}
         <ComposableMap width={ width } height={ height } projection={projection} >
             <Geographies geography={geographies}>
@@ -71,13 +71,13 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
                       default: {
                         outline: "none",
                         stroke: "#000000",
-                        strokeWidth: "0.01"
+                        strokeWidth: "0.5"
                       },
                       hover: {
                         // fill: "#F53",
                         outline: "none",
                         stroke: "#000000",
-                        strokeWidth: "0.05"
+                        strokeWidth: "2"
                       },
                       pressed: {
                         outline: "none"
@@ -98,7 +98,7 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
       </div>
 
   return (
-    <div>
+    <div style={{height: '600px'}} >
 {Regional.display ? <Region /> : <UK />
         }
     </div>

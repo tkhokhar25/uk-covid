@@ -45,29 +45,73 @@ const App = () => {
             })
     }, [])
 
+    // return (
+    //     <div>
+    //         {displaySimulator ? <Sketcher setDisplaySimulator={setDisplaySimulator}/> :
+    //       <Container data-tip=''>
+    //           <Row>
+    //               <h1>{'England Covid-19 Tracker'}</h1>
+    //               <Button color='primary' onClick={() => setDisplaySimulator(true)}><h4>View Simulator</h4></Button>
+    //           </Row>
+    //           <Row>
+    //               <Col>
+    //                   {cases === null ? null : <Dashboard borderColors={borderColors} backgroundColors={backgroundColors} labels={labels} cases={cases} /> }
+    //                   <Col>
+    //                       <UKMap setTooltipContent={setContent} areaCases={areaCases} Regional={Regional} toggleDisplayRegional={toggleDisplayRegional} secondaryTable={secondaryTable} setSecondaryTable={setSecondaryTable} />
+    //                       <ReactTooltip>{content}</ReactTooltip>
+    //                       {/* {(localCases === null || content==='') ? null : <Chart borderColor={borderColors[0]} backgroundColor={backgroundColors[0]} label={labels[0]} date={localCases.Date} data={localCases['East Midlands'].Derby} display={true} height={200} width={700} />} */}
+    //                   </Col>
+    //               </Col>
+    //               <Col>
+    //                   <CovidTable areaCases={areaCases} toggleDisplayRegional={toggleDisplayRegional} secondaryTable={secondaryTable} setSecondaryTable={setSecondaryTable} />
+    //               </Col>
+    //           </Row>
+    //           <Row>
+    //               {cases === null ? null : borderColors.map((color, i)=> <Chart borderColor={borderColors[i]} backgroundColor={backgroundColors[i]} label={labels[i]} date={cases.Date} data={cases[Object.keys(cases)[i]]} display={true} height={200} width={700} />)}
+    //           </Row>
+    //           <Row>
+    //               <Button style={{backgroundColor: 'White', color: 'black'}} onClick={() => window.open('https://www.github.com/tkhokhar25/uk-covid')}>
+    //                   <img src={process.env.PUBLIC_URL + '/logo32.png'} alt='yolo'></img>Check out on Github
+    //               </Button>
+    //           </Row>
+    //       </Container>
+    //       }
+    //   </div>
+    // )
     return (
-        <div>
+        <div style={{maxWidth: window.innerWidth}}>
             {displaySimulator ? <Sketcher setDisplaySimulator={setDisplaySimulator}/> :
           <Container data-tip=''>
               <Row>
-                  <h1>{'England Covid-19 Tracker'}</h1>
-                  <Button color='primary' onClick={() => setDisplaySimulator(true)}><h4>View Simulator</h4></Button>
+                  <Col xs='6' md='3'><h1>{'England Covid-19 Tracker'}</h1></Col>
+                  <Col xs='6' md='3'><Button color='primary' onClick={() => setDisplaySimulator(true)}><h4>View Simulator</h4></Button></Col>
               </Row>
-              <Row>
+              {/* <Row>
                   <Col>
                       {cases === null ? null : <Dashboard borderColors={borderColors} backgroundColors={backgroundColors} labels={labels} cases={cases} /> }
                       <Col>
                           <UKMap setTooltipContent={setContent} areaCases={areaCases} Regional={Regional} toggleDisplayRegional={toggleDisplayRegional} secondaryTable={secondaryTable} setSecondaryTable={setSecondaryTable} />
                           <ReactTooltip>{content}</ReactTooltip>
-                          {/* {(localCases === null || content==='') ? null : <Chart borderColor={borderColors[0]} backgroundColor={backgroundColors[0]} label={labels[0]} date={localCases.Date} data={localCases['East Midlands'].Derby} display={true} height={200} width={700} />} */}
+                         // {(localCases === null || content==='') ? null : <Chart borderColor={borderColors[0]} backgroundColor={backgroundColors[0]} label={labels[0]} date={localCases.Date} data={localCases['East Midlands'].Derby} display={true} height={200} width={700} />}
                       </Col>
                   </Col>
                   <Col>
                       <CovidTable areaCases={areaCases} toggleDisplayRegional={toggleDisplayRegional} secondaryTable={secondaryTable} setSecondaryTable={setSecondaryTable} />
                   </Col>
+              </Row> */}
+              <Row>
+                <Col>{cases === null ? null : <Dashboard borderColors={borderColors} backgroundColors={backgroundColors} labels={labels} cases={cases} /> } </Col>
               </Row>
               <Row>
-                  {cases === null ? null : borderColors.map((color, i)=> <Chart borderColor={borderColors[i]} backgroundColor={backgroundColors[i]} label={labels[i]} date={cases.Date} data={cases[Object.keys(cases)[i]]} display={true} height={200} width={700} />)}
+                <Col xs='12' md='6'>
+                    <UKMap setTooltipContent={setContent} areaCases={areaCases} Regional={Regional} toggleDisplayRegional={toggleDisplayRegional} secondaryTable={secondaryTable} setSecondaryTable={setSecondaryTable} />
+                    <ReactTooltip>{content}</ReactTooltip>
+                    {cases === null ? null : borderColors.map((color, i)=> <Chart borderColor={borderColors[i]} backgroundColor={backgroundColors[i]} label={labels[i]} date={cases.Date} data={cases[Object.keys(cases)[i]]} display={true} height={200} width={700} />)}
+                {/* {(localCases === null || content==='') ? null : <Chart borderColor={borderColors[0]} backgroundColor={backgroundColors[0]} label={labels[0]} date={localCases.Date} data={localCases['East Midlands'].Derby} display={true} height={200} width={700} />} */}
+                </Col>
+                <Col xs='12' md='6'>
+                    <CovidTable areaCases={areaCases} toggleDisplayRegional={toggleDisplayRegional} secondaryTable={secondaryTable} setSecondaryTable={setSecondaryTable} />
+                </Col>
               </Row>
               <Row>
                   <Button style={{backgroundColor: 'White', color: 'black'}} onClick={() => window.open('https://www.github.com/tkhokhar25/uk-covid')}>
