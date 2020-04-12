@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/uk-covid/static/css/main.ec2132fd.chunk.css",
-    "main.js": "/uk-covid/static/js/main.06a8fdc1.chunk.js",
-    "main.js.map": "/uk-covid/static/js/main.06a8fdc1.chunk.js.map",
+    "main.js": "/uk-covid/static/js/main.ea2abeaf.chunk.js",
+    "main.js.map": "/uk-covid/static/js/main.ea2abeaf.chunk.js.map",
     "runtime-main.js": "/uk-covid/static/js/runtime-main.8e8543b4.js",
     "runtime-main.js.map": "/uk-covid/static/js/runtime-main.8e8543b4.js.map",
     "static/css/2.55187c50.chunk.css": "/uk-covid/static/css/2.55187c50.chunk.css",
     "static/js/2.f1d1d3eb.chunk.js": "/uk-covid/static/js/2.f1d1d3eb.chunk.js",
     "static/js/2.f1d1d3eb.chunk.js.map": "/uk-covid/static/js/2.f1d1d3eb.chunk.js.map",
     "index.html": "/uk-covid/index.html",
-    "precache-manifest.9eeb2679c37a1c657fdbc0848cdec2d6.js": "/uk-covid/precache-manifest.9eeb2679c37a1c657fdbc0848cdec2d6.js",
+    "precache-manifest.19fd95fec825694bfa5d7165c6fd4dce.js": "/uk-covid/precache-manifest.19fd95fec825694bfa5d7165c6fd4dce.js",
     "service-worker.js": "/uk-covid/service-worker.js",
     "static/css/2.55187c50.chunk.css.map": "/uk-covid/static/css/2.55187c50.chunk.css.map",
     "static/css/main.ec2132fd.chunk.css.map": "/uk-covid/static/css/main.ec2132fd.chunk.css.map",
@@ -20,6 +20,6 @@
     "static/css/2.55187c50.chunk.css",
     "static/js/2.f1d1d3eb.chunk.js",
     "static/css/main.ec2132fd.chunk.css",
-    "static/js/main.06a8fdc1.chunk.js"
+    "static/js/main.ea2abeaf.chunk.js"
   ]
 }
