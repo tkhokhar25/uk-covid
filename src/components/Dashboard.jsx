@@ -10,7 +10,7 @@ const Dashboard = ({ borderColors, backgroundColors, labels, cases }) => {
         {backgroundColors.map((color, i) => <Col xs='4' md ='2' style={{color: borderColors[i]}}>
                                                 <Card style={{backgroundColor: color}}>
                                                     <CardBody>
-                                                        <CardTitle>{labels[i]}</CardTitle>
+                                                        <CardTitle style={{whiteSpace: "nowrap"}}>{labels[i]}</CardTitle>
                                                         <CardSubtitle>{cases[Object.keys(cases)[i]].slice(-1)[0]}</CardSubtitle>
                                                     </CardBody>
                                                 </Card>

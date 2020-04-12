@@ -12,7 +12,7 @@ const CovidTable = ({ areaCases, toggleDisplayRegional, secondaryTable, setSecon
             } else {
                 const fileName = areaName.replace(/ /g, '_')
             
-                toggleDisplayRegional({ display: true, fileName, regionCases: areaCases[areaName].regional });
+                toggleDisplayRegional({ display: true, fileName, regionName: areaName, regionCases: areaCases[areaName].regional });
             }
 
             setSecondaryTable({ display: !secondaryTable.display, areaName })
@@ -20,7 +20,7 @@ const CovidTable = ({ areaCases, toggleDisplayRegional, secondaryTable, setSecon
             setSecondaryTable({ display: true, areaName })
 
             const fileName = areaName.replace(/ /g, '_')
-            toggleDisplayRegional({ display: true, fileName, regionCases: areaCases[areaName].regional });
+            toggleDisplayRegional({ display: true, fileName, regionName: areaName, regionCases: areaCases[areaName].regional });
         }
   }
 
@@ -31,6 +31,7 @@ const CovidTable = ({ areaCases, toggleDisplayRegional, secondaryTable, setSecon
                 </Alert>
             </Row>
             <Row>
+            {!secondaryTable.display ?
                 <Col xs='12'>
                     <Table striped bordered hover>
                         <thead>
@@ -47,8 +48,8 @@ const CovidTable = ({ areaCases, toggleDisplayRegional, secondaryTable, setSecon
                         </tbody>
                     </Table>
                 </Col>
+                :
                 <Col>
-                {secondaryTable.display ?
                     <Table striped bordered hover>
                         <thead>
                             <tr>
@@ -64,11 +65,8 @@ const CovidTable = ({ areaCases, toggleDisplayRegional, secondaryTable, setSecon
                                                                                                         </tr>)}
                         </tbody>
                     </Table>
-                :
-                null
-                            }
-
                 </Col>
+            }
             </Row>
         </Container>;
     }

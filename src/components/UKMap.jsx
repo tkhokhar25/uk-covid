@@ -16,7 +16,7 @@ import RegionalMap from "./RegionalMap";
 const width = 800;
 const height = 800;
 
-const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, secondaryTable, setSecondaryTable }) => {
+const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, secondaryTable, setSecondaryTable, setGraphData, localCases }) => {
   const [geographies, setGeographies] = useState([]);
 
   useEffect(() => {
@@ -37,7 +37,8 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
     const fileName = regionName.replace(/ /g, '_')
 
     setTooltipContent("");
-    toggleDisplayRegional({ display: true, fileName, regionCases: areaCases[regionName].regional });
+    setGraphData({display: true, data: localCases.Totals[geographies[regionIndex].properties.EER13NM] })
+    toggleDisplayRegional({ display: true, fileName, regionCases: areaCases[regionName].regional, regionName });
     setSecondaryTable({ display: true, areaName: regionName })
   }
 
@@ -61,9 +62,11 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
                     geography={geo}
                     onMouseEnter={() => {
                       setTooltipContent(`${geo.properties.EER13NM}: ${areaCases[geo.properties.EER13NM].total} Cases`);
+                      setGraphData({display: true, data: localCases.Totals[geo.properties.EER13NM] })
                     }}
                     onMouseLeave={() => {
                       setTooltipContent("");
+                      setGraphData({display: false, data: [] })
                     }}
                     fill={geo.properties.EER13NM in areaCases ? colorScale(areaCases[geo.properties.EER13NM].total) : colorScale(0)}
                     onClick={() => handleRegionClick(idx)}
@@ -94,7 +97,7 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
     const Region = () => 
       <div>
         <Button color='primary' onClick={() => { toggleDisplayRegional({display: false}); setSecondaryTable({ ...secondaryTable, display: false }); }}>BACK</Button>
-        <RegionalMap fileName={Regional.fileName} regionCases={Regional.regionCases} setTooltipContent={setTooltipContent}/>
+        <RegionalMap fileName={Regional.fileName} regionCases={Regional.regionCases} regionName={Regional.regionName} setTooltipContent={setTooltipContent} setGraphData={setGraphData} localCases={localCases} />
       </div>
 
   return (

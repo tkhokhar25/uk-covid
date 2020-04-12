@@ -12,7 +12,7 @@ import {
 const width = 800;
 const height = 800;
 
-const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
+const RegionalMap = ({ fileName, regionCases, regionName, setTooltipContent, setGraphData, localCases }) => {
   const [geographies, setGeographies] = useState([])
 
   useEffect(() => {
@@ -48,14 +48,17 @@ const RegionalMap = ({ fileName, regionCases, setTooltipContent }) => {
                 onMouseEnter={() => {
                   const numCases = (geo.properties.lad19nm in regionCases ? regionCases[geo.properties.lad19nm] : '0');
                   setTooltipContent(`${geo.properties.lad19nm}: ${numCases} Cases`);
+                  setGraphData({display: true, data: localCases[regionName][geo.properties.lad19nm] })
                 }}
                 onMouseLeave={() => {
                   setTooltipContent("");
+                  setGraphData({display: false, data: [0] })
                 }}
                 fill={geo.properties.lad19nm in regionCases ? colorScale(regionCases[geo.properties.lad19nm]) : colorScale(0)}
                 onClick={() => {
                   const numCases = (geo.properties.lad19nm in regionCases ? regionCases[geo.properties.lad19nm] : '0');
                   setTooltipContent(`${geo.properties.lad19nm}: ${numCases} Cases`);
+                  setGraphData({display: true, data: localCases[regionName][geo.properties.lad19nm] })
                 }}
                 style={{
                   default: {
