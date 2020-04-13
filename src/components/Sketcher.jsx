@@ -3,11 +3,11 @@ import P5Wrapper from 'react-p5-wrapper';
 import { Container, Row, Col, Button } from 'reactstrap';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider';
-
+import {isMobile} from 'react-device-detect';
 import Ball from './Ball';
 
-const width = 800;
-const height = 600;
+const width = window.innerHeight > window.innerWidth ? window.innerWidth * 0.9 : 800;
+const height = isMobile ? window.innerHeight * 0.75 : 600;
 
 var balls = [];
 
@@ -16,7 +16,7 @@ function sketch (p, simulationState) {
   p.setup = () => {
     p.createCanvas(width, height);
     
-    for (var i = 0; i < 200; i++) {
+    for (var i = 0; i < simulationState.numBalls; i++) {
       balls[i] = new Ball(p, simulationState);
     }
 
@@ -38,7 +38,7 @@ function sketch (p, simulationState) {
 
 function sketchLegend(p) {
   p.setup = () => {
-    p.createCanvas(650, 20);
+    p.createCanvas(width, 60);
   };
 
   p.draw = () => {
@@ -63,28 +63,42 @@ function sketchLegend(p) {
 
     p.text('Infected', 260, 17);
 
-    p.fill('pink');
-		p.noStroke();
-    p.ellipse(360, 10, 15, 15);
-    
-    p.text('Recovered', 375, 17);
+    if (isMobile) {
+      p.fill('pink');
+      p.noStroke();
+      p.ellipse(15, 40, 15, 15);
+      
+      p.text('Recovered', 30, 47);
 
-    p.fill('grey');
-		p.noStroke();
-    p.ellipse(490, 10, 15, 15);
-    
-    p.text('Deceased', 505, 17);
+      p.fill('grey');
+      p.noStroke();
+      p.ellipse(145, 40, 15, 15);
+      
+      p.text('Deceased', 160, 47);
+    } else {
+      p.fill('pink');
+      p.noStroke();
+      p.ellipse(360, 10, 15, 15);
+      
+      p.text('Recovered', 375, 17);
+  
+      p.fill('grey');
+      p.noStroke();
+      p.ellipse(490, 10, 15, 15);
+      
+      p.text('Deceased', 505, 17)
+    }
 
     p.noLoop()
   };
 }
 
 const Sketcher = ({ setDisplaySimulator }) =>  {
-  const [simulationState, setSimulationState] = useState({ initiallyExposed: 1, exposedToInfected: 80, infectedToRecovers: 80 });
+  const [simulationState, setSimulationState] = useState({ numBalls: 200, initiallyExposed: 1, exposedToInfected: 80, infectedToRecovers: 80 });
 
   return (
     <Container>
-      <Row>
+      <Row style={{padding: '25px'}}>
         <p>
           <h1>{'SEIR DISEASE SPREAD MODEL USING BALLS'}</h1>
           <h6>{'A healthy person can get exposed to the virus.'}</h6>
@@ -92,7 +106,7 @@ const Sketcher = ({ setDisplaySimulator }) =>  {
           <h6>{'An infected person recovers or dies and can expose other people to the virus.'}</h6>
         </p>
       </Row>
-      <Row>
+      <Row style={{paddingLeft: '25px', paddingBottom: '25px'}}>
         <Button color='primary' onClick={() => setDisplaySimulator(false)}><h4>View Map</h4></Button>
       </Row>
       <Row>
@@ -102,9 +116,17 @@ const Sketcher = ({ setDisplaySimulator }) =>  {
           </Col>
           <Col>
             <div>
-              <p>Number of initially exposed balls (out of 200)</p>
+              <p>Number of balls</p>
               <RangeSlider
-                max={200}
+                max={400}
+                value={simulationState.numBalls}
+                onChange={changeEvent => setSimulationState({...simulationState, numBalls: changeEvent.target.value})}
+              />
+            </div>
+            <div>
+              <p>Number of initially exposed balls</p>
+              <RangeSlider
+                max={simulationState.numBalls}
                 value={simulationState.initiallyExposed}
                 onChange={changeEvent => setSimulationState({...simulationState, initiallyExposed: changeEvent.target.value})}
               />
@@ -123,8 +145,8 @@ const Sketcher = ({ setDisplaySimulator }) =>  {
                 onChange={changeEvent => setSimulationState({...simulationState, infectedToRecovers: changeEvent.target.value})}
               />
             </div>
-            <div>
-              <Button color='primary' onClick={() => setSimulationState({ initiallyExposed: 1, exposedToInfected: 80, infectedToRecovers: 80 })}>RESET AND RUN</Button>
+            <div style={{paddingBottom: '25px'}}>
+              <Button color='primary' onClick={() => setSimulationState({ numBalls: 200, initiallyExposed: 1, exposedToInfected: 80, infectedToRecovers: 80 })}>RESET AND RUN</Button>
             </div>
           </Col>
       </Row>

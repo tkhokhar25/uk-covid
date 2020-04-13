@@ -9,7 +9,6 @@ import {
   Geography,
 } from "react-simple-maps";
 import { Button } from 'reactstrap';
-// import {isMobile} from 'react-device-detect';
 
 import RegionalMap from "./RegionalMap";
 
@@ -33,13 +32,13 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
   }, []);
 
   const handleRegionClick = regionIndex => {
-    const regionName = geographies[regionIndex].properties.EER13NM
-    const fileName = regionName.replace(/ /g, '_')
-
-    setTooltipContent("");
-    setGraphData({display: true, data: localCases.Totals[geographies[regionIndex].properties.EER13NM] })
-    toggleDisplayRegional({ display: true, fileName, regionCases: areaCases[regionName].regional, regionName });
-    setSecondaryTable({ display: true, areaName: regionName })
+      const regionName = geographies[regionIndex].properties.EER13NM
+      const fileName = regionName.replace(/ /g, '_')
+  
+      setTooltipContent("");
+      setGraphData({display: true, data: localCases.Totals[geographies[regionIndex].properties.EER13NM] })
+      toggleDisplayRegional({ display: true, fileName, regionCases: areaCases[regionName].regional, regionName });
+      setSecondaryTable({ display: true, areaName: regionName })
   }
 
   const projection = geoMercator().fitSize([width, height], {type:"FeatureCollection", features: geographies})
@@ -101,7 +100,7 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
       </div>
 
   return (
-    <div style={{height: '600px'}} >
+    <div style={{height: '600px', marginTop: '25px'}} >
 {Regional.display ? <Region /> : <UK />
         }
     </div>

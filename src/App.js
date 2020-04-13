@@ -57,7 +57,6 @@ const App = () => {
               })
             })
     }, [])
-    console.log(graphData);
 
     return (
         <div style={{maxWidth: window.innerWidth}}>
@@ -74,9 +73,9 @@ const App = () => {
                 <Col xs='12' md='6'>
                     <UKMap setTooltipContent={setContent} areaCases={areaCases} Regional={Regional} toggleDisplayRegional={toggleDisplayRegional} secondaryTable={secondaryTable} setSecondaryTable={setSecondaryTable} setGraphData={setGraphData} localCases={localCases} />
                     <ReactTooltip>{content}</ReactTooltip>
-                    {graphData.display ? <h2 style={{marginLeft: '25px'}}>{content}</h2> : null}
+                    {graphData.display ? <h2>{content}</h2> : null}
                     {graphData.display ? <Chart borderColor={borderColors[0]} backgroundColor={backgroundColors[0]} label={labels[0]} date={localCases.Date} data={graphData.data} display={true} height={200} width={700} /> : null }
-                    <h2 style={{marginLeft: '25px'}}>{'England Trends'}</h2>
+                    <h2>{'England Trends'}</h2>
                     {cases === null ? null : borderColors.map((color, i)=> <Chart borderColor={borderColors[i]} backgroundColor={backgroundColors[i]} label={labels[i]} date={cases.Date} data={cases[Object.keys(cases)[i]]} display={true} height={200} width={700} />)}
                 </Col>
                 <Col xs='12' md='6'>
@@ -84,7 +83,7 @@ const App = () => {
                 </Col>
               </Row>
               <Row>
-                  <Col xs='12' style={{margin: '25px'}}>
+                  <Col xs='12' style={{paddingTop: '25px', paddingBottom: '25px'}}>
                     <Button style={{backgroundColor: 'White', color: 'black'}} onClick={() => window.open('https://www.github.com/tkhokhar25/uk-covid')}>
                         <img src={process.env.PUBLIC_URL + '/logo32.png'} alt='yolo'></img>Check out on Github
                     </Button>

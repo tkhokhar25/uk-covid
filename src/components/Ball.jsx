@@ -1,5 +1,7 @@
-const width = 800;
-const height = 600;
+import {isMobile} from 'react-device-detect';
+
+const width = isMobile ? window.innerWidth : 800;
+const height = isMobile ? window.innerHeight * 0.75 : 600;
 
 const { hypot } = Math
 
