@@ -63,9 +63,9 @@ const App = () => {
         <div style={{maxWidth: window.innerWidth}}>
             {displaySimulator ? <Sketcher setDisplaySimulator={setDisplaySimulator}/> :
           <Container data-tip=''>
-              <Row>
-                  <Col xs='6' md='3'><h1>{'England Covid-19 Tracker'}</h1></Col>
-                  <Col xs='6' md='3'><Button color='primary' onClick={() => setDisplaySimulator(true)}><h4>View Simulator</h4></Button></Col>
+                <Row style={{paddingTop: '25px'}}>
+                    <Col xs='12' md='6'><h1>{'England Covid-19 Tracker'}</h1></Col>
+                  <Col xs='12' md='6' style={{paddingBottom: '25px'}}><Button color='primary' onClick={() => setDisplaySimulator(true)}><h4>View Simulator</h4></Button></Col>
               </Row>
               <Row>
                 <Col>{cases === null ? null : <Dashboard borderColors={borderColors} backgroundColors={backgroundColors} labels={labels} cases={cases} /> } </Col>
@@ -74,7 +74,9 @@ const App = () => {
                 <Col xs='12' md='6'>
                     <UKMap setTooltipContent={setContent} areaCases={areaCases} Regional={Regional} toggleDisplayRegional={toggleDisplayRegional} secondaryTable={secondaryTable} setSecondaryTable={setSecondaryTable} setGraphData={setGraphData} localCases={localCases} />
                     <ReactTooltip>{content}</ReactTooltip>
+                    {graphData.display ? <h2 style={{marginLeft: '25px'}}>{content}</h2> : null}
                     {graphData.display ? <Chart borderColor={borderColors[0]} backgroundColor={backgroundColors[0]} label={labels[0]} date={localCases.Date} data={graphData.data} display={true} height={200} width={700} /> : null }
+                    <h2 style={{marginLeft: '25px'}}>{'England Trends'}</h2>
                     {cases === null ? null : borderColors.map((color, i)=> <Chart borderColor={borderColors[i]} backgroundColor={backgroundColors[i]} label={labels[i]} date={cases.Date} data={cases[Object.keys(cases)[i]]} display={true} height={200} width={700} />)}
                 </Col>
                 <Col xs='12' md='6'>
@@ -82,9 +84,11 @@ const App = () => {
                 </Col>
               </Row>
               <Row>
-                  <Button style={{backgroundColor: 'White', color: 'black'}} onClick={() => window.open('https://www.github.com/tkhokhar25/uk-covid')}>
-                      <img src={process.env.PUBLIC_URL + '/logo32.png'} alt='yolo'></img>Check out on Github
-                  </Button>
+                  <Col xs='12' style={{margin: '25px'}}>
+                    <Button style={{backgroundColor: 'White', color: 'black'}} onClick={() => window.open('https://www.github.com/tkhokhar25/uk-covid')}>
+                        <img src={process.env.PUBLIC_URL + '/logo32.png'} alt='yolo'></img>Check out on Github
+                    </Button>
+                </Col>
               </Row>
           </Container>
           }
