@@ -44,7 +44,7 @@ const UKMap = ({ setTooltipContent, areaCases, Regional, toggleDisplayRegional, 
   const projection = geoMercator().fitSize([width, height], {type:"FeatureCollection", features: geographies})
     
   var colorScale = scaleThreshold()
-    .domain([1000, 1500, 2000, 2500, 5000, 15000])
+    .domain([0, 5000, 6000, 8000, 10000, 12000, 15000])
     .range(schemeReds[7]);
 
 

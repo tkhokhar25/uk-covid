@@ -23,7 +23,7 @@ const RegionalMap = ({ fileName, regionCases, regionName, setTooltipContent, set
           return
         }
         response.json().then(worlddata => {
-          setGeographies(feature(worlddata, worlddata.objects.x).features)
+          setGeographies(feature(worlddata, worlddata.objects.Merged_Polygon).features)
         })
       })
   }, [fileName])
