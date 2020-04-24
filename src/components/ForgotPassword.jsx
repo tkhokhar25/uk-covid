@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
+import { Container, Form, FormGroup, Label, Input, Button, FormFeedback, Spinner } from 'reactstrap';
 
 const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) => {
     const [isCodeSent, setCodeSent] = useState(false);
@@ -9,6 +9,7 @@ const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) 
     const [code, setCode] = useState('');
     const [password, setPassword] = useState('')
     const [verifyPassword, setVerifyPassword] = useState('')
+    const [loading, setLoading] = useState(false);
 
     const handleVerificationCode = () => {
         if (password !== verifyPassword) {
@@ -23,10 +24,12 @@ const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) 
             body: JSON.stringify({ email, code, password })
         };
 
+        setLoading(true);
+
         fetch('https://virus-backend.herokuapp.com/verify_code', requestOptions)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                setLoading(false);
                 if (data === 'success') {
                     setError('');
                     showLogin(false);
@@ -44,9 +47,12 @@ const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) 
             body: JSON.stringify({ email })
         };
 
+        setLoading(true);
+
         fetch('https://virus-backend.herokuapp.com/forgot_password', requestOptions)
             .then(response => response.json())
             .then(data => {
+                setLoading(false);
                 if (data === 'success') {
                     setCodeSent(true);
                     setError('');
@@ -58,6 +64,8 @@ const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) 
 
     return (
         <Container style={{margin: 50}}>
+            {loading ? <div><Spinner color="primary" /></div> :
+            <div>
             <Button style={{marginBottom: 50}} color='primary' onClick={() => setDisplayForgotPassword(false)}><h4>Back</h4></Button>
                 <Form>
                 {
@@ -82,6 +90,8 @@ const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) 
                     </div>
                 }
                 </Form>
+                </div>
+                }
         </Container>
     );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, Form, FormGroup, Label, Input, Button, FormFeedback } from 'reactstrap';
+import { Container, Form, FormGroup, Label, Input, Button, FormFeedback, Spinner } from 'reactstrap';
 import ForgotPassword from "./ForgotPassword.jsx";
 
 const Login = ( { showLogin, setLoggedIn } ) => {
@@ -7,6 +7,7 @@ const Login = ( { showLogin, setLoggedIn } ) => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [displayForgotPassword, setDisplayForgotPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = () => {
         const requestOptions = {
@@ -15,9 +16,12 @@ const Login = ( { showLogin, setLoggedIn } ) => {
             body: JSON.stringify({ email, password })
         };
 
+        setLoading(true)
+
         fetch('https://virus-backend.herokuapp.com/login', requestOptions)
             .then(response => response.json())
             .then(data => {
+                setLoading(false);
                 if (data.code === 200) {
                     showLogin(false);
                     setLoggedIn(true);
@@ -29,7 +33,8 @@ const Login = ( { showLogin, setLoggedIn } ) => {
 
     return (
         <Container style={{margin: 50}}>
-            {displayForgotPassword ? <ForgotPassword setDisplayForgotPassword={setDisplayForgotPassword} setLoggedIn={setLoggedIn} showLogin={showLogin} /> :
+            {loading ? <div><Spinner color="primary" /></div> :
+            displayForgotPassword ? <ForgotPassword setDisplayForgotPassword={setDisplayForgotPassword} setLoggedIn={setLoggedIn} showLogin={showLogin} /> :
             <div>
                 <Button style={{marginBottom: 50}} color='primary' onClick={() => showLogin(false)}><h4>Back</h4></Button>
                 <Form>
