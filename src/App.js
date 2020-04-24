@@ -11,6 +11,7 @@ import Sketcher from './components/Sketcher.jsx';
 import Payment from "./components/Payment.jsx";
 import Login from "./components/Login";
 import CreateAccount from "./components/CreateAccount";
+import ChangePassword from "./components/ChangePassword";
 
 const borderColors = [Red, Blue, Grey];
 const backgroundColors = [LightRed, LightBlue, LightGrey];
@@ -25,10 +26,11 @@ const App = () => {
     const [Regional, toggleDisplayRegional] = useState({ display: false, fileName: '', regionCases: '' });
     const [secondaryTable, setSecondaryTable] = useState({ display: false, areaName: '' });
     const [displaySimulator, setDisplaySimulator] = useState(false);
-    const [donate, setDonate] = useState(true);
+    const [donate, setDonate] = useState(false);
     const [login, showLogin] = useState(false);
     const [isLoggedIn, setLoggedIn] = useState(false);
     const [displayCreateAccount, setDisplayCreateAccount] = useState(false);
+    const [changePassword, showChangePassword] = useState(false);
 
     useEffect(() => {
         fetch(process.env.PUBLIC_URL + "/covid_data/uk_totals.json")
@@ -65,20 +67,30 @@ const App = () => {
             })
     }, [])
 
+    const handleDonateClick = () => {
+        if (isLoggedIn) {
+            setDonate(true);
+        } else {
+            window.confirm('Please create an account or login before donating')
+        }
+    }
+
     return (
         <div style={{maxWidth: window.innerWidth}}>
             {displaySimulator ? <Sketcher setDisplaySimulator={setDisplaySimulator}/> : login ? <Login showLogin={showLogin} setLoggedIn={setLoggedIn} /> :
             displayCreateAccount ? <CreateAccount setDisplayCreateAccount={setDisplayCreateAccount} setLoggedIn={setLoggedIn} /> :
-            // donate ? <Payment setDonate={setDonate} /> :
+            donate ? <Payment setDonate={setDonate} /> :
+            changePassword ? <ChangePassword showChangePassword={showChangePassword} /> :
           <Container data-tip=''>
                 <Row style={{paddingTop: '25px'}}>
                     {isLoggedIn ? null : <Col xs='12' md='3' style={{paddingBottom: '25px'}}><Button color='primary' onClick={() => setDisplayCreateAccount(true)}><h4>Create Account</h4></Button></Col>}
                     {isLoggedIn ? null : <Col xs='12' md='2' style={{paddingBottom: '25px'}}><Button color='primary' onClick={() => showLogin(true)}><h4>Login</h4></Button></Col>}
+                    {isLoggedIn ? <Col xs='12' md='2' style={{paddingBottom: '25px'}}><Button color='primary' onClick={() => showChangePassword(true)}><h4>Change Password</h4></Button></Col> : null}
                 </Row>
                 <Row style={{paddingTop: '25px'}}>
                     <Col xs='12' md='6'><h1>{'England Covid-19 Tracker'}</h1></Col>
                   <Col xs='12' md='3' style={{paddingBottom: '25px'}}><Button color='primary' onClick={() => setDisplaySimulator(true)}><h4>View Simulator</h4></Button></Col>
-                  {/* <Col xs='12' md='3' style={{paddingBottom: '25px'}}><Button color='primary' onClick={() => setDonate(true)}><h4>Donate</h4></Button></Col> */}
+                  <Col xs='12' md='3' style={{paddingBottom: '25px'}}><Button color='primary' onClick={() => handleDonateClick()}><h4>Donate</h4></Button></Col>
               </Row>
               <Row>
                 <Col>{cases === null ? null : <Dashboard borderColors={borderColors} backgroundColors={backgroundColors} labels={labels} cases={cases} /> } </Col>

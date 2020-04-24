@@ -29,7 +29,7 @@ const Login = ( { showLogin, setLoggedIn } ) => {
 
     return (
         <Container style={{margin: 50}}>
-            {displayForgotPassword ? <ForgotPassword setDisplayForgotPassword={setDisplayForgotPassword} setLoggedIn={setLoggedIn} /> :
+            {displayForgotPassword ? <ForgotPassword setDisplayForgotPassword={setDisplayForgotPassword} setLoggedIn={setLoggedIn} showLogin={showLogin} /> :
             <div>
                 <Button style={{marginBottom: 50}} color='primary' onClick={() => showLogin(false)}><h4>Back</h4></Button>
                 <Form>
