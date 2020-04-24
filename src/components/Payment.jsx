@@ -105,6 +105,7 @@ const CheckoutForm = () => {
   const [cardComplete, setCardComplete] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState(null);
+  const [message, setMessage] = useState(null);
   const [billingDetails, setBillingDetails] = useState({
     email: '',
     phone: '',
@@ -129,31 +130,29 @@ const CheckoutForm = () => {
       setProcessing(true);
     }
 
-    const payload = await stripe.createPaymentMethod({
-      type: 'card',
-      card: elements.getElement(CardElement),
-      billing_details: billingDetails,
-    });
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
+        body: JSON.stringify({ email: billingDetails.email })
+    };
 
-    if (payload.error) {
-      setError(payload.error);
-    }
-
-    const charge = await stripe.createCharges({
-        amount: 1,
-        currency: 'usd',
-        description: 'Example charge',
-        source: payload.paymentMethod.id,
-        statement_descriptor: 'Custom descriptor',
-    });
-
-    if (charge.error) {
-    setError(payload.error);
-    } else {
-    setPaymentMethod(charge);
-    }
-
-    setProcessing(false);
+    fetch('https://virus-backend.herokuapp.com/donation', requestOptions)
+    .then(response => response.json())
+    .then(data => data['client_secret'])
+    .then(clientSecret => stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+            card: elements.getElement(CardElement),
+            billing_details: billingDetails
+        }
+    })).then(result => {
+        setProcessing(false);
+        if (result.error) {
+            setMessage('Sorry your donation could not be processed')
+        } else {
+            setMessage('Thank you for your donation!')
+        }
+        setPaymentMethod(result)
+    })
   };
 
   const reset = () => {
@@ -170,11 +169,10 @@ const CheckoutForm = () => {
   return paymentMethod ? (
     <div className="Result">
       <div className="ResultTitle" role="alert">
-        Payment successful
+        Result
       </div>
       <div className="ResultMessage">
-        Thanks for trying Stripe Elements. No money was charged, but we
-        generated a PaymentMethod: {paymentMethod.id}
+        {message}
       </div>
       <ResetButton onClick={reset} />
     </div>
@@ -228,7 +226,7 @@ const CheckoutForm = () => {
       </fieldset>
       {error && <ErrorMessage>{error.message}</ErrorMessage>}
       <SubmitButton processing={processing} error={error} disabled={!stripe}>
-        Donate
+        Donate $5!
       </SubmitButton>
     </form>
   );
