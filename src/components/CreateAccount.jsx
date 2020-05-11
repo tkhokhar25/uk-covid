@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Container, Form, FormGroup, Label, Input, Button, FormFeedback, Spinner } from 'reactstrap';
+import { emailRe } from './Constants';
 
 const CreateAccount = ( { setDisplayCreateAccount, setLoggedIn } ) => {
     const [email, setEmail] = useState('')
@@ -12,6 +13,12 @@ const CreateAccount = ( { setDisplayCreateAccount, setLoggedIn } ) => {
     const handleCreateAccount = () => {
         if (email === '') {
             setEmailError("Empty Email");
+            return
+        }
+
+        
+        if (!emailRe.test(email)) {
+            setEmailError("Invalid Email");
             return
         }
 

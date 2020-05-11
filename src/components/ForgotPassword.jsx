@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import { Container, Form, FormGroup, Label, Input, Button, FormFeedback, Spinner } from 'reactstrap';
 
+import { emailRe } from './Constants';
+
 const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) => {
     const [isCodeSent, setCodeSent] = useState(false);
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
+    const [emailError, setEmailError] = useState('')
     const [code, setCode] = useState('');
     const [password, setPassword] = useState('')
     const [verifyPassword, setVerifyPassword] = useState('')
@@ -55,6 +58,18 @@ const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) 
     };
 
     const sendVerificationCode = () => {
+
+        if (email === '') {
+            setEmailError("Empty Email");
+            return
+        }
+
+        
+        if (!emailRe.test(email)) {
+            setEmailError("Invalid Email");
+            return
+        }
+
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'},
@@ -98,7 +113,8 @@ const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) 
                     <div>
                         <FormGroup>
                             <Label for="exampleEmail">Email</Label>
-                            <Input type="email" name="email" id="exampleEmail" placeholder="example@example.com" onChange={e => setEmail(e.target.value)} />
+                            <Input invalid={emailError !== ''} type="email" name="email" id="exampleEmail" placeholder="example@example.com" onChange={e => setEmail(e.target.value)} />
+                            <FormFeedback>{emailError}</FormFeedback>
                         </FormGroup>
                         <Button color='primary' onClick={ev => { ev.preventDefault(); sendVerificationCode(); }}>Send Verification Code</Button>
                     </div>
