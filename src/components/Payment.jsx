@@ -108,7 +108,6 @@ const CheckoutForm = () => {
   const [message, setMessage] = useState(null);
   const [billingDetails, setBillingDetails] = useState({
     email: '',
-    phone: '',
     name: '',
   });
 
@@ -161,7 +160,6 @@ const CheckoutForm = () => {
     setPaymentMethod(null);
     setBillingDetails({
       email: '',
-      phone: '',
       name: '',
     });
   };
@@ -201,18 +199,6 @@ const CheckoutForm = () => {
           value={billingDetails.email}
           onChange={(e) => {
             setBillingDetails({...billingDetails, email: e.target.value});
-          }}
-        />
-        <Field
-          label="Phone"
-          id="phone"
-          type="tel"
-          placeholder="(941) 555-0123"
-          required
-          autoComplete="tel"
-          value={billingDetails.phone}
-          onChange={(e) => {
-            setBillingDetails({...billingDetails, phone: e.target.value});
           }}
         />
       </fieldset>

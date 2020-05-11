@@ -119,6 +119,7 @@ const Sketcher = ({ setDisplaySimulator }) =>  {
               <p>Number of balls</p>
               <RangeSlider
                 max={400}
+                min={1}
                 value={simulationState.numBalls}
                 onChange={changeEvent => setSimulationState({...simulationState, numBalls: changeEvent.target.value})}
               />
@@ -127,6 +128,7 @@ const Sketcher = ({ setDisplaySimulator }) =>  {
               <p>Number of initially exposed balls</p>
               <RangeSlider
                 max={simulationState.numBalls}
+                min={1}
                 value={simulationState.initiallyExposed}
                 onChange={changeEvent => setSimulationState({...simulationState, initiallyExposed: changeEvent.target.value})}
               />
@@ -134,6 +136,8 @@ const Sketcher = ({ setDisplaySimulator }) =>  {
             <div>
               <p>Percent of exposed population that gets infected</p>
               <RangeSlider
+                max={99}
+                min={1}
                 value={simulationState.exposedToInfected}
                 onChange={changeEvent => setSimulationState({...simulationState, exposedToInfected: changeEvent.target.value})}
               />
@@ -141,6 +145,8 @@ const Sketcher = ({ setDisplaySimulator }) =>  {
             <div>
               <p>Percent of infected population that recovers</p>
               <RangeSlider
+                max={99}
+                min={1}
                 value={simulationState.infectedToRecovers}
                 onChange={changeEvent => setSimulationState({...simulationState, infectedToRecovers: changeEvent.target.value})}
               />
