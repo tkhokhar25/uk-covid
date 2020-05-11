@@ -3,7 +3,6 @@ import { Container, Form, FormGroup, Label, Input, Button, FormFeedback, Spinner
 
 const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) => {
     const [isCodeSent, setCodeSent] = useState(false);
-    const [isVerify, setVerify] = useState(false);
     const [email, setEmail] = useState('');
     const [error, setError] = useState('');
     const [code, setCode] = useState('');
@@ -12,6 +11,21 @@ const ForgotPassword = ( { setDisplayForgotPassword, setLoggedIn, showLogin } ) 
     const [loading, setLoading] = useState(false);
 
     const handleVerificationCode = () => {
+        if (password === '') {
+            setError("Empty Password");
+            return
+        }
+        
+        if (password.length > 20) {
+            setError("Password length cannot exceed 20 characters");
+            return
+        }
+
+        if (password !== verifyPassword) {
+            setError("Passwords don't match");
+            return
+        }
+
         if (password !== verifyPassword) {
             setError("Passwords don't match");
             return

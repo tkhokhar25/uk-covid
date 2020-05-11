@@ -6,12 +6,27 @@ const CreateAccount = ( { setDisplayCreateAccount, setLoggedIn } ) => {
     const [password, setPassword] = useState('')
     const [verifyPassword, setVerifyPassword] = useState('')
     const [error, setError] = useState('')
+    const [emailError, setEmailError] = useState('')
     const [loading, setLoading] = useState(false);
 
     const handleCreateAccount = () => {
+        if (email === '') {
+            setEmailError("Empty Email");
+            return
+        }
+
+        if (password === '') {
+            setError("Empty Password");
+            return
+        }
+        
+        if (password.length > 20) {
+            setError("Password length cannot exceed 20 characters");
+            return
+        }
+
         if (password !== verifyPassword) {
             setError("Passwords don't match");
-            console.log('cakked')
             return
         }
         setError('');
@@ -45,7 +60,8 @@ const CreateAccount = ( { setDisplayCreateAccount, setLoggedIn } ) => {
                 <Form>
                     <FormGroup>
                         <Label for="exampleEmail">Email</Label>
-                        <Input type="email" name="email" id="exampleEmail" placeholder="example@example.com" onChange={e => setEmail(e.target.value)} />
+                        <Input invalid={emailError !== ''} type="email" name="email" id="exampleEmail" placeholder="example@example.com" onChange={e => setEmail(e.target.value)} />
+                        <FormFeedback>{emailError}</FormFeedback>
                     </FormGroup>
                     <FormGroup>
                         <Label for="examplePassword">Password</Label>
@@ -53,7 +69,7 @@ const CreateAccount = ( { setDisplayCreateAccount, setLoggedIn } ) => {
                     </FormGroup>
                     <FormGroup>
                         <Label for="exampleVerifyPassword">Password</Label>
-                        <Input invalid={error !== ''}type="password" name="verifyPassword" id="verifyPassword" placeholder="Verify Password" onChange={e => setVerifyPassword(e.target.value)} />
+                        <Input invalid={error !== ''} type="password" name="verifyPassword" id="verifyPassword" placeholder="Verify Password" onChange={e => setVerifyPassword(e.target.value)} />
                         <FormFeedback>{error}</FormFeedback>
                     </FormGroup>
                     <Button color='primary' onClick={ev => handleCreateAccount()}>Create Account</Button>
